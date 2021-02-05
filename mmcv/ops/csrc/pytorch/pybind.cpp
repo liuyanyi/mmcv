@@ -182,6 +182,16 @@ Tensor nms_rotated(const Tensor dets, const Tensor scores, const Tensor order,
                    const Tensor dets_sorted, const float iou_threshold,
                    const int multi_label);
 
+Tensor polygon_iou(const Tensor& a_tsr, const Tensor& b_tsr);
+
+int feature_refine_forward(const Tensor features, const Tensor best_bboxes, 
+                           const float spatial_scale, const int points,
+                           Tensor output);
+
+int feature_refine_backward(const Tensor top_grad, const Tensor best_bboxes, 
+                            const float spatial_scale, const int points, 
+                            Tensor bottom_grad);
+
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
   m.def("get_compiler_version", &get_compiler_version, "get_compiler_version");
   m.def("get_compiling_cuda_version", &get_compiling_cuda_version,
@@ -370,4 +380,13 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
   m.def("nms_rotated", &nms_rotated, "NMS for rotated boxes", py::arg("dets"),
         py::arg("scores"), py::arg("order"), py::arg("dets_sorted"),
         py::arg("iou_threshold"), py::arg("multi_label"));
+  m.def("polygon_iou", &polygon_iou,
+        "IOU calculation across 2 batches of 4-points polygons (CPU)",
+        py::arg("a_tsr"), py::arg("b_tsr"));
+  m.def("feature_refine_forward", &feature_refine_forward, "Feature Refine forward (CUDA)",
+        py::arg("features"), py::arg("best_bboxes"), py::arg("spatial_scale"),
+        py::arg("points"), py::arg("output"));
+  m.def("feature_refine_backward", &feature_refine_backward, "Feature Refine backward (CUDA)",
+        py::arg("top_grad"), py::arg("best_bboxes"), py::arg("spatial_scale"), 
+        py::arg("points"), py::arg("bottom_grad"));
 }
