@@ -30,6 +30,7 @@ from .tin_shift import TINShift, tin_shift
 from .batched_rnms import batched_nms_rotated, batched_nms_rotated_ver2
 from .polygon_geo import polygon_iou
 from .feature_refine_module import FeatureRefineModule
+from .roi_align_rotated import RoIAlignRotated, roi_align_rotated
 
 __all__ = [
     'bbox_overlaps', 'CARAFE', 'CARAFENaive', 'CARAFEPack', 'carafe',
@@ -46,5 +47,5 @@ __all__ = [
     'point_sample', 'rel_roi_point_to_rel_img_point', 'SimpleRoIAlign',
     'SAConv2d', 'TINShift', 'tin_shift', 'box_iou_rotated', 'nms_rotated',
     'batched_nms_rotated', 'batched_nms_rotated_ver2', 'polygon_iou',
-    'FeatureRefineModule'
+    'FeatureRefineModule', 'RoIAlignRotated', 'roi_align_rotated'
 ]

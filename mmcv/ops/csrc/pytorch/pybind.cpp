@@ -192,6 +192,16 @@ int feature_refine_backward(const Tensor top_grad, const Tensor best_bboxes,
                             const float spatial_scale, const int points, 
                             Tensor bottom_grad);
 
+int roi_align_rotated_forward_cuda(Tensor features, Tensor rois,
+                                   int pooled_height, int pooled_width,
+                                   float spatial_scale, int sample_num,
+                                   Tensor output);
+
+int roi_align_rotated_backward_cuda(Tensor top_grad, Tensor rois,
+                                    int pooled_height, int pooled_width,
+                                    float spatial_scale, int sample_num,
+                                    Tensor bottom_grad);
+
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
   m.def("get_compiler_version", &get_compiler_version, "get_compiler_version");
   m.def("get_compiling_cuda_version", &get_compiling_cuda_version,
@@ -389,4 +399,12 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
   m.def("feature_refine_backward", &feature_refine_backward, "Feature Refine backward (CUDA)",
         py::arg("top_grad"), py::arg("best_bboxes"), py::arg("spatial_scale"), 
         py::arg("points"), py::arg("bottom_grad"));
+  m.def("roi_align_rotated_forward", &roi_align_rotated_forward_cuda, "Roi_Align_Rotated forward (CUDA)",
+        py::arg("features"), py::arg("rois"), py::arg("pooled_height"),
+        py::arg("pooled_width"), py::arg("spatial_scale"),py::arg("sample_num"),
+        py::arg("output"));
+  m.def("roi_align_rotated_backward", &roi_align_rotated_backward_cuda, "Roi_Align_Rotated backward (CUDA)",
+        py::arg("top_grad"), py::arg("rois"), py::arg("pooled_height"),
+        py::arg("pooled_width"), py::arg("spatial_scale"),py::arg("sample_num"),
+        py::arg("bottom_grad"));
 }

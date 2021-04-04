@@ -1,5 +1,5 @@
 import torch
-from . import nms_rotated
+from .nms import nms_rotated
 
 # Ver1 modified from orginal mmcv
 def batched_nms_rotated(boxes, scores, idxs, nms_cfg, class_agnostic=False):
@@ -58,7 +58,8 @@ def batched_nms_rotated(boxes, scores, idxs, nms_cfg, class_agnostic=False):
         for id in torch.unique(idxs):
             mask = (idxs == id).nonzero(as_tuple=False).view(-1)
             dets, keep = nms_op(boxes_for_nms[mask], scores[mask], **nms_cfg_)
-            total_mask[mask[keep]] = True
+            aa = mask[keep]
+            total_mask[aa] = True
 
         keep = total_mask.nonzero(as_tuple=False).view(-1)
         keep = keep[scores[keep].argsort(descending=True)]
