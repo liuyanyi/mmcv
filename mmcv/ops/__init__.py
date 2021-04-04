@@ -12,6 +12,7 @@ from .deprecated_wrappers import Linear_deprecated as Linear
 from .deprecated_wrappers import MaxPool2d_deprecated as MaxPool2d
 from .focal_loss import (SigmoidFocalLoss, SoftmaxFocalLoss,
                          sigmoid_focal_loss, softmax_focal_loss)
+from .fused_bias_leakyrelu import FusedBiasLeakyReLU, fused_bias_leakyrelu
 from .info import (get_compiler_version, get_compiling_cuda_version,
                    get_onnxruntime_op_path)
 from .masked_conv import MaskedConv2d, masked_conv2d
@@ -27,10 +28,12 @@ from .roi_pool import RoIPool, roi_pool
 from .saconv import SAConv2d
 from .sync_bn import SyncBatchNorm
 from .tin_shift import TINShift, tin_shift
+from .upfirdn2d import upfirdn2d
 from .batched_rnms import batched_nms_rotated, batched_nms_rotated_ver2
 from .polygon_geo import polygon_iou
 from .feature_refine_module import FeatureRefineModule
 from .roi_align_rotated import RoIAlignRotated, roi_align_rotated
+
 
 __all__ = [
     'bbox_overlaps', 'CARAFE', 'CARAFENaive', 'CARAFEPack', 'carafe',
@@ -46,6 +49,7 @@ __all__ = [
     'ConvTranspose2d', 'Linear', 'MaxPool2d', 'CrissCrossAttention', 'PSAMask',
     'point_sample', 'rel_roi_point_to_rel_img_point', 'SimpleRoIAlign',
     'SAConv2d', 'TINShift', 'tin_shift', 'box_iou_rotated', 'nms_rotated',
+    'upfirdn2d', 'FusedBiasLeakyReLU', 'fused_bias_leakyrelu',
     'batched_nms_rotated', 'batched_nms_rotated_ver2', 'polygon_iou',
     'FeatureRefineModule', 'RoIAlignRotated', 'roi_align_rotated'
 ]

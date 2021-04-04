@@ -15,12 +15,17 @@ except ImportError:
     TJCS_RGB = TJPF_GRAY = TJPF_BGR = TurboJPEG = None
 
 try:
-    from PIL import Image
+    from PIL import Image, ImageOps
 except ImportError:
     Image = None
 
+try:
+    import tifffile
+except ImportError:
+    tifffile = None
+
 jpeg = None
-supported_backends = ['cv2', 'turbojpeg', 'pillow']
+supported_backends = ['cv2', 'turbojpeg', 'pillow', 'tifffile']
 
 imread_flags = {
     'color': IMREAD_COLOR,
@@ -36,8 +41,9 @@ def use_backend(backend):
 
     Args:
         backend (str): The image decoding backend type. Options are `cv2`,
-        `pillow`, `turbojpeg` (see https://github.com/lilohuang/PyTurboJPEG).
-        `turbojpeg` is faster but it only supports `.jpeg` file format.
+        `pillow`, `turbojpeg` (see https://github.com/lilohuang/PyTurboJPEG)
+        and `tifffile`. `turbojpeg` is faster but it only supports `.jpeg`
+        file format.
     """
     assert backend in supported_backends
     global imread_backend
@@ -51,6 +57,9 @@ def use_backend(backend):
     elif imread_backend == 'pillow':
         if Image is None:
             raise ImportError('`Pillow` is not installed')
+    elif imread_backend == 'tifffile':
+        if tifffile is None:
+            raise ImportError('`tifffile` is not installed')
 
 
 def _jpegflag(flag='color', channel_order='bgr'):
@@ -92,6 +101,8 @@ def _pillow2array(img, flag='color', channel_order='bgr'):
         if array.ndim >= 3 and array.shape[2] >= 3:  # color image
             array[:, :, :3] = array[:, :, (2, 1, 0)]  # RGB to BGR
     else:
+        # Handle exif orientation tag
+        img = ImageOps.exif_transpose(img)
         # If the image mode is not 'RGB', convert it to 'RGB' first.
         if img.mode != 'RGB':
             if img.mode != 'LA':
@@ -132,9 +143,9 @@ def imread(img_or_path, flag='color', channel_order='bgr', backend=None):
             Note that the `turbojpeg` backened does not support `unchanged`.
         channel_order (str): Order of channel, candidates are `bgr` and `rgb`.
         backend (str | None): The image decoding backend type. Options are
-            `cv2`, `pillow`, `turbojpeg`, `None`. If backend is None, the
-            global imread_backend specified by ``mmcv.use_backend()`` will be
-            used. Default: None.
+            `cv2`, `pillow`, `turbojpeg`, `tifffile`, `None`.
+            If backend is None, the global imread_backend specified by
+            ``mmcv.use_backend()`` will be used. Default: None.
 
     Returns:
         ndarray: Loaded image array.
@@ -163,6 +174,9 @@ def imread(img_or_path, flag='color', channel_order='bgr', backend=None):
         elif backend == 'pillow':
             img = Image.open(img_or_path)
             img = _pillow2array(img, flag, channel_order)
+            return img
+        elif backend == 'tifffile':
+            img = tifffile.imread(img_or_path)
             return img
         else:
             flag = imread_flags[flag] if is_str(flag) else flag
