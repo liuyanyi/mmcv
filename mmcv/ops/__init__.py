@@ -24,6 +24,7 @@ from .point_sample import (SimpleRoIAlign, point_sample,
                            rel_roi_point_to_rel_img_point)
 from .psa_mask import PSAMask
 from .roi_align import RoIAlign, roi_align
+from .roi_align_rotated import RoIAlignRotated, roi_align_rotated
 from .roi_pool import RoIPool, roi_pool
 from .saconv import SAConv2d
 from .sync_bn import SyncBatchNorm
@@ -32,8 +33,6 @@ from .upfirdn2d import upfirdn2d
 from .batched_rnms import batched_nms_rotated, batched_nms_rotated_ver2
 from .polygon_geo import polygon_iou
 from .feature_refine_module import FeatureRefineModule
-from .roi_align_rotated import RoIAlignRotated, roi_align_rotated
-
 
 __all__ = [
     'bbox_overlaps', 'CARAFE', 'CARAFENaive', 'CARAFEPack', 'carafe',
@@ -50,6 +49,6 @@ __all__ = [
     'point_sample', 'rel_roi_point_to_rel_img_point', 'SimpleRoIAlign',
     'SAConv2d', 'TINShift', 'tin_shift', 'box_iou_rotated', 'nms_rotated',
     'upfirdn2d', 'FusedBiasLeakyReLU', 'fused_bias_leakyrelu',
-    'batched_nms_rotated', 'batched_nms_rotated_ver2', 'polygon_iou',
-    'FeatureRefineModule', 'RoIAlignRotated', 'roi_align_rotated'
+    'RoIAlignRotated', 'roi_align_rotated', 'batched_nms_rotated',
+    'batched_nms_rotated_ver2', 'polygon_iou', 'FeatureRefineModule'
 ]
